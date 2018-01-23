@@ -1,0 +1,7 @@
+numpy
+opencv-python
+Pillow
+easydict
+click
+tqdm
+tensorflow-gpu==1.4.1

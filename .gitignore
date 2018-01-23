@@ -1,0 +1,11 @@
+*.swp
+*.pyc
+__pycache__
+.ipynb_checkpoints
+.vscode/
+.idea/
+*.egg-info
+
+*.o
+*.so
+
