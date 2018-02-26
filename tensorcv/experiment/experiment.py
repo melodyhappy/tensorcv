@@ -2,8 +2,8 @@ import os
 import tensorflow as tf
 
 from tensorcv.data.dataset import get_dataset
-from tensorcv.model import get_model
-from tensorcv.trainer import get_trainer
+from tensorcv.train.model import Model
+from tensorcv.train.trainer import get_trainer
 from tensorcv.predict_saver import get_predict_saver
 
 
@@ -11,7 +11,7 @@ class Experiment(object):
     def __init__(self, config):
         self.config = config
         self.dataset = get_dataset(config)
-        self.model = get_model(config)
+        self.model = Model(config)
         self.trainer = get_trainer(config)
 
         run_config = self.trainer.get_run_config()

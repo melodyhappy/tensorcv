@@ -1,6 +1,6 @@
 import tensorflow as tf
-from tensorcv.trainer.trainer import Trainer
-from tensorcv.trainer.hooks import CheckpointPerfactSaverHook
+from tensorcv.train.trainer.trainer import Trainer
+from tensorcv.train.hooks import CheckpointPerfactSaverHook
 
 
 class MultiGPUTrainer(Trainer):
@@ -46,9 +46,10 @@ class MultiGPUTrainer(Trainer):
             if mode == tf.estimator.ModeKeys.EVAL:
                 with tf.variable_scope('net'):
                     net_out =  model.net(features, is_training)
-                loss = model.loss(net_out, labels)
-                metrics = model.metrics(net_out, labels, mode)
-                model.summary(features, labels, loss, metrics, mode)
+                loss = model.loss(labels, net_out)
+                predictions = model.predictions(net_out)
+                metrics = model.metrics(labels, net_out, mode)
+                model.summary(features, labels, predictions, mode)
                 return tf.estimator.EstimatorSpec(
                     mode=mode,
                     loss=loss,
@@ -60,11 +61,10 @@ class MultiGPUTrainer(Trainer):
             feature_shards = self.feature_shard(features, num_gpus)
             label_shards = self.feature_shard(labels, num_gpus)
 
-            optimizer = model.optimizer()
+            lr = model.lr_policy(tf.train.get_global_step())
+            optimizer = model.optimizer(lr)
             tower_losses = []
             tower_grads = []
-            update_ops = None
-            metrics = None
             for i in range(num_gpus):
                 with tf.variable_scope('net', reuse=bool(i != 0)):
                     with tf.name_scope('tower_%d' % i) as name_scope:
@@ -72,14 +72,17 @@ class MultiGPUTrainer(Trainer):
                             feature = feature_shards[i]
                             label = label_shards[i]
                             net_out = model.net(feature, is_training)
-                            loss = model.loss(net_out, label)
+                            loss = model.loss(label, net_out)
                             grads = optimizer.compute_gradients(loss)
                             tower_losses.append(loss)
                             tower_grads.append(grads)
                             if i == 0:
                                 update_ops =  tf.get_collection(
                                     tf.GraphKeys.UPDATE_OPS, name_scope)
-                                metrics = model.metrics(net_out, label, mode)
+                                net_out_0 = net_out
+                                feature_0 = feature
+                                label_0 = label
+            metrics = model.metrics(label_0, net_out_0, mode)
             grads = self.average_gradients(tower_grads)
             loss = tf.reduce_mean(tower_losses)
             apply_gradient_op = optimizer.apply_gradients(
@@ -88,7 +91,10 @@ class MultiGPUTrainer(Trainer):
             train_op.extend(update_ops)
             train_op = tf.group(*train_op)
 
-            model.summary(features, labels, loss, metrics, mode)
+            predictions_0 = model.predictions(net_out_0)
+            model.summary(feature_0, label_0, predictions_0, mode)
+
+            update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
 
             training_chief_hooks = [
                 CheckpointPerfactSaverHook(
@@ -103,3 +109,4 @@ class MultiGPUTrainer(Trainer):
                 training_chief_hooks=training_chief_hooks)
 
         return model_fn
+

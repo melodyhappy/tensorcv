@@ -1,7 +1,7 @@
-import time
-
+from tensorflow.python.training.session_run_hook import SessionRunHook
 from tensorflow.python.training.basic_session_run_hooks import CheckpointSaverHook
 from tensorflow.python.training.basic_session_run_hooks import SecondOrStepTimer
+from tensorcv.logger import logger
 
 
 class SecondOrPerfactStepTimer(SecondOrStepTimer):

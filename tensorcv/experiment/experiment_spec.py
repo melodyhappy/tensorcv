@@ -1,4 +1,5 @@
 import os
+import json
 from configparser import ConfigParser, ExtendedInterpolation
 
 class ExperimentSpec(object):
@@ -88,8 +89,67 @@ class ExperimentSpec(object):
         return self.config.get('data', 'dataset_type')
 
     @property
-    def model_type(self):
-        return self.config.get('model', 'model_type')
+    def net(self):
+        return self.config.get('train', 'net')
+
+    @property
+    def net_params(self):
+        params = self.config.get('train', 'net_params', fallback='{}')
+        return json.loads(params)
+
+    @property
+    def loss(self):
+        return self.config.get('train', 'loss')
+
+    @property
+    def loss_params(self):
+        params = self.config.get('train', 'loss_params', fallback='{}')
+        return json.loads(params)
+
+    @property
+    def predictions(self):
+        return self.config.get('train', 'predictions')
+
+    @property
+    def predictions_params(self):
+        params = self.config.get('train', 'predictions_params', fallback='{}')
+        return json.loads(params)
+
+    @property
+    def metrics(self):
+        return self.config.get('train', 'metrics')
+
+    @property
+    def metrics_params(self):
+        params = self.config.get('train', 'metrics_params', fallback='{}')
+        return json.loads(params)
+
+    @property
+    def lr_policy(self):
+        return self.config.get('train', 'lr_policy')
+
+    @property
+    def lr_policy_params(self):
+        params = self.config.get('train', 'lr_policy_params', fallback='{}')
+        return json.loads(params)
+
+    @property
+    def optimizer(self):
+        return self.config.get('train', 'optimizer')
+
+    @property
+    def optimizer_params(self):
+        params = self.config.get('train', 'optimizer_params', fallback='{}')
+        return json.loads(params)
+
+    @property
+    def summary(self):
+        return self.config.get('train', 'summary')
+
+    @property
+    def summary_params(self):
+        params = self.config.get('train', 'summary_params', fallback='{}')
+        return json.loads(params)
 
     @property
     def max_steps(self):

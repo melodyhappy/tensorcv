@@ -1,6 +1,6 @@
 import tensorflow as tf
-from tensorcv.trainer.trainer import Trainer
-from tensorcv.trainer.hooks import CheckpointPerfactSaverHook
+from tensorcv.train.trainer.trainer import Trainer
+from tensorcv.train.hooks import CheckpointPerfactSaverHook
 
 
 class SimpleTrainer(Trainer):
@@ -15,16 +15,17 @@ class SimpleTrainer(Trainer):
                     mode=mode,
                     predictions=predictions)
 
-            loss = model.loss(net_out, labels)
-            metrics = model.metrics(net_out, labels, mode)
-            model.summary(features, labels, loss, metrics, mode)
+            loss = model.loss(labels, net_out)
+            metrics = model.metrics(labels, net_out, mode)
+            model.summary(features, labels, predictions, mode)
             if mode == tf.estimator.ModeKeys.EVAL:
                 return tf.estimator.EstimatorSpec(
                     mode=mode,
                     loss=loss,
                     eval_metric_ops=metrics)
 
-            optimizer = model.optimizer()
+            lr = model.lr_policy(tf.train.get_global_step())
+            optimizer = model.optimizer(lr)
             update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
             with tf.control_dependencies(update_ops):
                 train_op = optimizer.minimize(
@@ -44,3 +45,4 @@ class SimpleTrainer(Trainer):
                 training_chief_hooks=training_chief_hooks)
 
         return model_fn
+

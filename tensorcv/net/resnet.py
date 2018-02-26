@@ -367,3 +367,14 @@ def imagenet_resnet_v2(resnet_size, num_classes, data_format=None):
   params = model_params[resnet_size]
   return imagenet_resnet_v2_generator(
       params['block'], params['layers'], num_classes, data_format)
+
+
+def cifar10_resnet_v2(feature, is_training, params):
+    net = cifar10_resnet_v2_generator(params['size'], params['num_classes'])
+    return net(feature, is_training)
+
+
+def resnet_v2(feature, is_training, params):
+    net = imagenet_resnet_v2(params['size'], params['num_classes'])
+    return net(feature, is_training)
+

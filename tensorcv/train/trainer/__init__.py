@@ -1,5 +1,5 @@
-from tensorcv.trainer.simple_trainer import SimpleTrainer
-from tensorcv.trainer.multi_gpu_trainer import MultiGPUTrainer
+from tensorcv.train.trainer.simple_trainer import SimpleTrainer
+from tensorcv.train.trainer.multi_gpu_trainer import MultiGPUTrainer
 
 
 def get_trainer(config):

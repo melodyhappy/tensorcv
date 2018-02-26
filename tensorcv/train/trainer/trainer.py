@@ -14,3 +14,4 @@ class Trainer(object):
 
     def get_model_fn(self, model):
         raise NotImplementedError()
+
