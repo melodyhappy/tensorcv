@@ -1,8 +1,10 @@
 from tensorcv.predict_saver.classifier_predict_saver import ClassifierTSVPredictSaver
+from tensorcv.predict_saver.fashionai_attribute_predict_saver import FashionaiAttributePredictSaver
 
 
 PREDICT_SAVER_MAP = {
-    'classifiertsvpredictsaver': ClassifierTSVPredictSaver
+    'classifiertsvpredictsaver': ClassifierTSVPredictSaver,
+    'fashionaiattributepredictsaver': FashionaiAttributePredictSaver
 }
 
 

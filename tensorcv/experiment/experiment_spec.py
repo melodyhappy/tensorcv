@@ -89,6 +89,11 @@ class ExperimentSpec(object):
         return self.config.get('data', 'dataset_type')
 
     @property
+    def dataset_params(self):
+        params = self.config.get('data', 'dataset_params', fallback='{}')
+        return json.loads(params)
+
+    @property
     def net(self):
         return self.config.get('train', 'net')
 
@@ -164,6 +169,15 @@ class ExperimentSpec(object):
         return self.config.getint('train', 'model_save_steps', fallback=1000)
 
     @property
+    def model_step(self):
+        return self.config.get('evaluate', 'model_step')
+
+    @property
     def predict_saver_type(self):
         return self.config.get('evaluate', 'predict_saver_type')
+
+    @property
+    def predict_saver_params(self):
+        params = self.config.get('evaluate', 'predict_saver_params', fallback='{}')
+        return json.loads(params)
 

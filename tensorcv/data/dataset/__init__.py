@@ -3,11 +3,13 @@ from tensorcv.data.dataset.dataset import TSVDataset
 from tensorcv.data.dataset.dataset import TFRecordDataset
 from tensorcv.data.dataset.classifier_dataset import ClassifierTSVDataset
 from tensorcv.data.dataset.cifar10_dataset import Cifar10TFRecordDataset
+from tensorcv.data.dataset.fashionai_attribute_dataset import FashionaiAttributeDataset
 
 
 DATASET_MAP = {
     'classifiertsvdataset': ClassifierTSVDataset,
-    'cifar10tfrecorddataset': Cifar10TFRecordDataset
+    'cifar10tfrecorddataset': Cifar10TFRecordDataset,
+    'fashionaiattributedataset': FashionaiAttributeDataset
 }
 
 
