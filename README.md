@@ -1,4 +1,5 @@
 # skirt_length_design baseline实验描述
+天池fashionai比赛地址：https://tianchi.aliyun.com/competition/introduction.htm?spm=5176.100066.0.0.350cd780qWQYjg&raceId=231649
 * 将官方提供的`skirt_length_design`的数据拆成训练集和验证集。
 * 将所有图片直接resize成224x224
 * label直接去看y的位置，忽视m
