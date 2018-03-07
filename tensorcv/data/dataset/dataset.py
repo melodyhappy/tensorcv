@@ -20,7 +20,7 @@ class Dataset(object):
             self.config.validation_data, tf.estimator.ModeKeys.EVAL)
         return input_fn
 
-    def get_test_input_fn_map(self, mode=tf.estimator.ModeKeys.EVAL):
+    def get_test_input_fn_map(self, mode=tf.estimator.ModeKeys.PREDICT):
         input_fn_map = {}
         for name, path in self.config.test_data.items():
             input_fn = self.get_input_fn(path, mode)
